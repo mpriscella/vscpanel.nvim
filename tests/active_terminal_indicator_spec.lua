@@ -25,8 +25,8 @@ describe("vscpanel active terminal indicator", function()
 			local buf1 = vim.api.nvim_create_buf(false, true)
 			local buf2 = vim.api.nvim_create_buf(false, true)
 
-			state.dispatch("add_terminal", buf1, "Terminal 1")
-			state.dispatch("add_terminal", buf2, "Terminal 2")
+			state.dispatch("add_terminal", { buffer = buf1, label = "Terminal 1", shell = "/bin/bash" })
+			state.dispatch("add_terminal", { buffer = buf2, label = "Terminal 2", shell = "bin/bash" })
 
 			-- Set terminal 1 as active.
 			state.dispatch("set_active_terminal", buf1)
@@ -52,8 +52,8 @@ describe("vscpanel active terminal indicator", function()
 			local buf2 = vim.api.nvim_create_buf(false, true)
 
 			-- Mock the state
-			state.dispatch("add_terminal", buf1, "Terminal 1")
-			state.dispatch("add_terminal", buf2, "Terminal 2")
+			state.dispatch("add_terminal", { buffer = buf1, label = "Terminal 1", shell = "/bin/bash" })
+			state.dispatch("add_terminal", { buffer = buf2, label = "Terminal 2", shell = "bin/bash" })
 
 			-- Set terminal 1 as active
 			state.dispatch("set_active_terminal", buf1)
@@ -80,8 +80,8 @@ describe("vscpanel active terminal indicator", function()
 			local buf2 = vim.api.nvim_create_buf(false, true)
 
 			-- Mock the state
-			state.dispatch("add_terminal", buf1, "Terminal 1")
-			state.dispatch("add_terminal", buf2, "Terminal 2")
+			state.dispatch("add_terminal", { buffer = buf1, label = "Terminal 1", shell = "/bin/bash" })
+			state.dispatch("add_terminal", { buffer = buf2, label = "Terminal 2", shell = "bin/bash" })
 
 			-- Set no active terminal
 			state.dispatch("set_active_terminal", nil)
@@ -101,7 +101,7 @@ describe("vscpanel active terminal indicator", function()
 			local buf = vim.api.nvim_create_buf(false, true)
 
 			-- Mock the state
-			state.dispatch("add_terminal", buf, "Test")
+			state.dispatch("add_terminal", { buffer = buf, label = "Test", shell = "/bin/bash" })
 
 			-- Set as active terminal
 			state.dispatch("set_active_terminal", buf)

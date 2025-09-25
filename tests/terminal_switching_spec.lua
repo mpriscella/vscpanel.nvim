@@ -61,7 +61,6 @@ describe("vscpanel terminal switching", function()
 			vim.api.nvim_win_set_buf(panel_window, first_terminal)
 
 			-- Update the active terminal in state
-			-- state.set_active_terminal(first_terminal)
 			state.dispatch("set_active_terminal", first_terminal)
 
 			-- Trigger winbar update
@@ -75,7 +74,7 @@ describe("vscpanel terminal switching", function()
 		assert.are.equal(first_terminal, new_current_buf)
 
 		-- Verify the active terminal state was updated
-		assert.are.equal(first_terminal, state.active_terminal())
+		assert.are.equal(first_terminal, state.active_terminal().buffer)
 	end)
 
 	it("handles invalid terminal selection gracefully", function()
@@ -128,7 +127,7 @@ describe("vscpanel terminal switching", function()
 		local second_terminal = terminals[2].buffer
 
 		-- Initially, second terminal should be active (most recently created)
-		assert.are.equal(second_terminal, state.active_terminal())
+		assert.are.equal(second_terminal, state.active_terminal().buffer)
 
 		-- Switch to first terminal
 		local function switch_to_terminal_by_index(index)
@@ -144,13 +143,13 @@ describe("vscpanel terminal switching", function()
 		switch_to_terminal_by_index(1)
 
 		-- Verify active terminal was updated
-		assert.are.equal(first_terminal, state.active_terminal())
+		assert.are.equal(first_terminal, state.active_terminal().buffer)
 
 		-- Switch back to second terminal
 		switch_to_terminal_by_index(2)
 
 		-- Verify active terminal was updated again
-		assert.are.equal(second_terminal, state.active_terminal())
+		assert.are.equal(second_terminal, state.active_terminal().buffer)
 	end)
 
 	it("closes terminal and deletes buffer when requested", function()
@@ -295,7 +294,6 @@ describe("vscpanel terminal switching", function()
 		-- Clear the state
 		-- state.state.terminals = {}
 		state.dispatch("clear_terminals")
-		-- state.set_active_terminal(nil)
 		state.dispatch("set_active_terminal", nil)
 
 		-- Verify no terminals remain
@@ -334,7 +332,7 @@ describe("vscpanel terminal switching", function()
 		local active_terminal_index = nil
 
 		for i, term in ipairs(terminals) do
-			if term.buffer == active_terminal then
+			if term.buffer == active_terminal.buffer then
 				active_terminal_index = i
 				break
 			end
@@ -343,13 +341,13 @@ describe("vscpanel terminal switching", function()
 		assert.is.Not.Nil(active_terminal_index)
 
 		-- Close the active terminal
-		if vim.api.nvim_buf_is_valid(active_terminal) then
-			vim.api.nvim_buf_delete(active_terminal, { force = true })
+		if vim.api.nvim_buf_is_valid(active_terminal.buffer) then
+			vim.api.nvim_buf_delete(active_terminal.buffer, { force = true })
 		end
 
 		-- Remove from state and adjust active terminal
 		-- state.remove_terminal(active_terminal)
-		state.dispatch("remove_terminal", active_terminal)
+		state.dispatch("remove_terminal", active_terminal.buffer)
 		if #terminals > 1 then -- We had multiple terminals, now we have one less
 			local remaining_terminals = state.terminals()
 			if #remaining_terminals > 0 then
@@ -363,7 +361,7 @@ describe("vscpanel terminal switching", function()
 
 		-- Verify we switched to a different terminal
 		local new_active = state.active_terminal()
-		assert.is_not_equal(active_terminal, new_active)
+		assert.is_not_equal(active_terminal.buffer, new_active.buffer)
 		assert.are.equal(#terminals - 1, #state.terminals(), "Should have one less terminal after deletion")
 	end)
 

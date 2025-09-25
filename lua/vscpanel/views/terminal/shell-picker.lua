@@ -3,7 +3,11 @@ local M = {}
 --- @class ShellPicker
 --- @field win integer|nil: Window ID (nil when not created)
 --- @field buf integer|nil: Buffer ID (nil when not created)
---- @field items string[]: List of valid shells.
+--- @field items ShellPickerItem[]: List of valid shells.
+
+--- @class ShellPickerItem
+--- @field label string
+--- @field shell string
 
 --- @type ShellPicker
 local menu = {
@@ -13,7 +17,7 @@ local menu = {
 }
 
 --- Get a list of valid shells in the host system.
---- @return string[] list A sorted list of valid shell labels.
+--- @return table list A sorted list of valid shell labels.
 local function valid_shells()
 	local shells = {}
 
@@ -26,16 +30,18 @@ local function valid_shells()
 	end
 
 	local list = {}
-	local default = ""
+	local default
 	for sh in pairs(shells) do
 		if sh == vim.o.shell then
-			default = vim.fs.basename(sh)
+			default = { label = vim.fs.basename(sh) .. " (Default)", shell = sh }
 		else
-			table.insert(list, vim.fs.basename(sh))
+			table.insert(list, { label = vim.fs.basename(sh), shell = sh })
 		end
 	end
-	table.sort(list)
-	table.insert(list, 1, default .. " (Default)")
+	table.sort(list, function(a, b)
+		return a.label < b.label
+	end)
+	table.insert(list, 1, default)
 	return list
 end
 
@@ -72,7 +78,7 @@ local function open()
 
 	local lines = {}
 	for i, it in ipairs(menu.items) do
-		lines[i] = it
+		lines[i] = it.label
 	end
 
 	vim.api.nvim_buf_set_lines(menu.buf, 0, -1, false, lines)
@@ -138,7 +144,7 @@ local function open()
 
 		close_menu()
 		local win = require("vscpanel.state").window_id()
-		require("vscpanel.views.terminal").create_terminal(win, item)
+		require("vscpanel.views.terminal").create_terminal(win, item.shell)
 		require("vscpanel").ensure_insert()
 	end, { buffer = menu.buf, silent = true, nowait = true })
 
@@ -151,7 +157,7 @@ local function open()
 
 		close_menu()
 		local win = require("vscpanel.state").window_id()
-		require("vscpanel.views.terminal").create_terminal(win, it)
+		require("vscpanel.views.terminal").create_terminal(win, it.shell)
 		require("vscpanel").ensure_insert()
 	end, { buffer = menu.buf, silent = true })
 

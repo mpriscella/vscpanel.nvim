@@ -134,7 +134,7 @@ describe("vscpanel panel-tabs integration", function()
 			local buf = vim.api.nvim_create_buf(false, true)
 			local actual_win = panel_win or vim.api.nvim_get_current_win()
 			vim.api.nvim_win_set_buf(actual_win, buf)
-			state.dispatch("add_terminal", buf, "bash")
+			state.dispatch("add_terminal", { buffer = buf, label = "bash", shell = "/bin/bash" })
 			vim.wait(10)
 			terminals = state.terminals()
 		end

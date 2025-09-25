@@ -49,7 +49,7 @@ function M.create_terminal(win, shell)
 
 	if ok then
 		local state = require("vscpanel.state")
-		state.dispatch("add_terminal", buf, vim.fs.basename(cmd))
+		state.dispatch("add_terminal", { buffer = buf, label = vim.fs.basename(cmd), shell = cmd })
 		state.dispatch("set_active_terminal", buf)
 
 		require("vscpanel.keybinds").setup_terminal_keybinds(buf)
@@ -76,7 +76,7 @@ function M.close_terminal(line_number)
 
 		-- Adjust active terminal if necessary before closing
 		local active = state.active_terminal()
-		if active == buffer_to_close then
+		if active.buffer == buffer_to_close then
 			-- Set active to the first available terminal that's not the one being closed
 			local remaining_terminals = state.terminals()
 			local new_active_terminal = nil
@@ -216,7 +216,7 @@ function M.handle_terminal_removal(buffer_id)
 	local tabs = require("vscpanel.views.terminal.tabs")
 
 	-- Determine if the closed buffer was the active terminal
-	local was_active = state.active_terminal() == buffer_id
+	local was_active = state.active_terminal().buffer == buffer_id
 
 	-- Remove terminal from state
 	state.dispatch("remove_terminal", buffer_id)
@@ -228,10 +228,10 @@ function M.handle_terminal_removal(buffer_id)
 	if was_active and #terminals > 0 then
 		local new_active = state.active_terminal()
 		-- Fallback in case active_terminal wasn't set by remove_terminal for some reason
-		if not (new_active and vim.api.nvim_buf_is_valid(new_active)) then
-			new_active = terminals[1] and terminals[1].buffer or nil
+		if not (new_active and vim.api.nvim_buf_is_valid(new_active.buffer)) then
+			new_active = terminals[1] and terminals[1] or nil
 			if new_active then
-				state.dispatch("set_active_terminal", new_active)
+				state.dispatch("set_active_terminal", new_active.buffer)
 			end
 		end
 
@@ -240,13 +240,13 @@ function M.handle_terminal_removal(buffer_id)
 			panel_window
 			and vim.api.nvim_win_is_valid(panel_window)
 			and new_active
-			and vim.api.nvim_buf_is_valid(new_active)
+			and vim.api.nvim_buf_is_valid(new_active.buffer)
 		then
 			-- Switch displayed buffer to the new active terminal
-			vim.api.nvim_win_set_buf(panel_window, new_active)
+			vim.api.nvim_win_set_buf(panel_window, new_active.buffer)
 
 			-- Re-apply terminal keybinds for the new buffer
-			require("vscpanel.keybinds").setup_terminal_keybinds(new_active)
+			require("vscpanel.keybinds").setup_terminal_keybinds(new_active.buffer)
 
 			-- Ensure focus and insert mode stay in the panel
 			vim.api.nvim_set_current_win(panel_window)

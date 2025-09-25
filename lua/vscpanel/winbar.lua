@@ -58,7 +58,7 @@ end
 --- @return string
 local function new_terminal_icon()
 	local opts = get_opts()
-	local icon = opts.icons.new_terminal
+	local icon = opts.icons.terminal.new_terminal
 	local constants = require("vscpanel.constants")
 
 	return table.concat({
@@ -73,7 +73,7 @@ end
 --- @return string
 local function launch_profile_icon()
 	local opts = get_opts()
-	local icon = opts.icons.launch_profile
+	local icon = opts.icons.terminal.launch_profile
 	local constants = require("vscpanel.constants")
 
 	return table.concat({
@@ -88,7 +88,7 @@ end
 --- @return string
 local function toggle_panel_size_icon()
 	local opts = get_opts()
-	local icon = opts.icons.toggle_panel_size
+	local icon = opts.icons.panel.toggle_panel_size
 	local constants = require("vscpanel.constants")
 
 	return table.concat({
@@ -103,7 +103,7 @@ end
 --- @return string
 local function hide_panel_icon()
 	local opts = get_opts()
-	local icon = opts.icons.hide_panel
+	local icon = opts.icons.panel.hide_panel
 	local constants = require("vscpanel.constants")
 
 	return table.concat({
@@ -118,7 +118,7 @@ end
 --- @return string
 local function help_icon()
 	local opts = get_opts()
-	local icon = opts.icons.help
+	local icon = opts.icons.terminal.help
 	local constants = require("vscpanel.constants")
 
 	return table.concat({

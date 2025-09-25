@@ -5,10 +5,17 @@
 --- @field position string? The position of the panel. Either "bottom" (default), "top", "left", or "right".
 
 --- @class panel.Config.Icons
---- @field close_terminal string?
+--- @field panel panel.Config.Icons.Panel?
+--- @field terminal panel.Config.Icons.Terminal?
+
+--- @class panel.Config.Icons.Panel
 --- @field hide_panel string?
---- @field launch_profile string?
 --- @field toggle_panel_size string?
+
+--- @class panel.Config.Icons.Terminal
+--- @field close_terminal string?
+--- @field help string?
+--- @field launch_profile string?
 --- @field new_terminal string?
 
 local M = {
@@ -18,13 +25,17 @@ local M = {
 		shell = vim.o.shell,
 		position = "bottom",
 		icons = {
-			close_terminal = "",
-			-- close_terminal = "", -- INFO: Disabling close terminal icon for now.
-			help = "󰋖",
-			hide_panel = "",
-			launch_profile = "",
-			toggle_panel_size = " ",
-			new_terminal = "",
+			panel = {
+				hide_panel = "",
+				toggle_panel_size = " ",
+			},
+			terminal = {
+				close_terminal = "",
+				-- close_terminal = "", -- INFO: Disabling close terminal icon for now.
+				help = "󰋖",
+				launch_profile = "",
+				new_terminal = "",
+			},
 		},
 	},
 }
