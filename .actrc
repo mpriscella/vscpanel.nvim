@@ -1,0 +1,3 @@
+--action-offline-mode
+--container-architecture linux/amd64
+--log-prefix-job-id

@@ -1,0 +1,223 @@
+ *vscpanel.txt*	A toggleable terminal panel for Neovim
+
+Author: mpriscella
+License: MIT
+Version: 1.0.0
+
+==============================================================================
+CONTENTS                                                     *vscpanel-contents*
+
+1. Introduction ............................ |vscpanel-introduction|
+2. Requirements ............................ |vscpanel-requirements|
+3. Installation ............................ |vscpanel-installation|
+4. Configuration ........................... |vscpanel-configuration|
+5. Commands ................................ |vscpanel-commands|
+6. Autocommands ............................ |vscpanel-autocommands|
+7. Functions ............................... |vscpanel-functions|
+8. Keymaps ................................. |vscpanel-keymaps|
+9. Examples ................................ |vscpanel-examples|
+
+==============================================================================
+INTRODUCTION                                             *vscpanel-introduction*
+
+vscpanel.nvim is a Neovim plugin that provides a toggleable panel with
+maximize/minimize functionality. It features dynamic winbar icons, robust
+state management, and extensive configuration options.
+
+Features:
+- Toggle panel visibility
+- Maximize/minimize terminal window
+- Dynamic winbar with contextual icons
+- Robust state management
+- Extensive configuration options
+- Menu system for terminal management
+
+==============================================================================
+REQUIREMENTS                                             *vscpanel-requirements*
+
+- Neovim 0.8.0 or higher
+
+==============================================================================
+INSTALLATION                                             *vscpanel-installation*
+
+Using lazy.nvim: >lua
+    {
+      "mpriscella/vscpanel.nvim",
+      config = function()
+        require("vscpanel").setup({
+          size = 18,
+          position = "bottom"
+        })
+      end,
+      keys = {
+        {
+          '<leader>t',
+          mode = { 'n', 't' },
+          function()
+            require('vscpanel.panel').toggle_panel()
+          end,
+        },
+        {
+          '<leader> ',
+          mode = { 'n', 't' },
+          function()
+            require('vscpanel').max_toggle()
+          end,
+        },
+        {
+          '<leader>s',
+          mode = { 'n', 't' },
+          function()
+            require('vscpanel.views.terminal.shell-picker').open()
+          end,
+        },
+      },
+    }
+<
+
+==============================================================================
+CONFIGURATION                                           *vscpanel-configuration*
+
+Default configuration: >lua
+    require("vscpanel").setup({
+      size = 18,
+      shell = vim.o.shell,
+      position = "bottom",
+      icons = {
+        close_terminal = "",
+        help = "󰋖",
+        hide_panel = "",
+        launch_profile = "",
+        resize = " ",
+        new_terminal = "",
+      },
+    })
+<
+
+Configuration Options:                                 *vscpanel-config-options*
+
+- size (number): The height of the panel when hte position is either "bottom"
+  or "top".
+- shell (string): The path to an exeutable shell. Defaults to vim.o.shell.
+- position (string): The position of the panel. Either "bottom" (default),
+  "top", "left", or "right".
+- icons (table): Table of icon overrides for winbar display.
+  - close_terminal (string): Icon for the close terminal action.
+  - help (string): Icon for the help action.
+  - hide_panel (string): Icon for the hide panel action.
+  - launch_profile (string): Icon for the launch profile action.
+  - maximize (string): Icon for the maximize action.
+  - new_terminal (string): Icon for the new terminal.
+
+==============================================================================
+COMMANDS                                                     *vscpanel-commands*
+
+:TogglePanel                                                      *:TogglePanel*
+    Toggle the panel visibility. Opens a new panel if none exists, or closes
+    the existing panel.
+
+:TogglePanelSize                                              *:TogglePanelSize*
+    Toggle maximize/minimize state of the terminal panel. When maximized,
+    the panel takes up the full window space. When minimized, it returns
+    to its configured size.
+
+:ShowTerminalMenu                                            *:ShowTerminalMenu*
+    Show a menu with options to create a new terminal or launch a terminal
+    profile. Can also be triggered with <Ctrl-N> when focused on plugin
+    windows.
+
+:PanelHelp                                                          *:PanelHelp*
+    Show a help window displaying all plugin keybindings and functionality.
+    Can also be triggered with g? when focused on plugin windows.
+
+==============================================================================
+AUTOCOMMANDS                                             *vscpanel-autocommands*
+
+Autocommands that are defined in this plugin.
+
+WinbarUpdate
+    Triggers an update of the Winbar. >lua
+        vim.api.nvim_exec_autocmds("User", { pattern = "WinbarUpdate" })
+<
+
+==============================================================================
+FUNCTIONS                                                   *vscpanel-functions*
+
+setup({opts})                                                 *vscpanel.setup()*
+    Setup the plugin with configuration options.
+
+    Parameters: ~
+        {opts} (table) Configuration options (see |vscpanel-configuration|)
+
+ensure_insert({win})                                  *vscpanel.ensure_insert()*
+    Ensure the given window is in insert mode if it contains a terminal.
+
+    Parameters: ~
+        {win} (number, optional) Window ID. Defaults to current window.
+
+max_toggle({winid})                                      *vscpanel.max_toggle()*
+    Toggle maximize/minimize state of the terminal panel.
+
+    Parameters: ~
+        {winid} (number, optional) Window ID to toggle. Defaults to current
+                                   panel window.
+
+show_help()                                               *vscpanel.show_help()*
+    Show a floating help window with all plugin keybindings and functionality.
+
+toggle_panel()                                         *vscpanel.toggle_panel()*
+    Toggle the terminal panel visibility.
+
+update_winbar()                                       *vscpanel.update_winbar()*
+    Update the winbar content and icons. Called automatically when panel
+    state changes.
+
+==============================================================================
+KEYMAPS                                                       *vscpanel-keymaps*
+
+Default keymaps (can be disabled in setup):
+
+<leader>t                                                            *<leader>t*
+    Toggle terminal panel (normal and terminal mode)
+
+<leader><Space>                                                *<leader><Space>*
+    Maximize/minimize terminal panel (normal and terminal mode, terminal only)
+
+<leader>s                                                            *<leader>s*
+    Show terminal menu (normal and terminal mode, terminal only)
+
+g?                                                                          *g?*
+    Show help window (normal mode, terminal and terminal tabs only)
+
+==============================================================================
+EXAMPLES                                                     *vscpanel-examples*
+
+Basic setup: >lua
+    require("vscpanel").setup()
+<
+
+Custom configuration: >lua
+    require("vscpanel").setup({
+      size = 25,
+      position = "top",
+      shell = "/bin/zsh",
+    })
+<
+
+Manual usage: >lua
+    -- Toggle panel
+    require("vscpanel.panel").toggle_panel()
+
+    -- Maximize current panel
+    require("vscpanel").max_toggle()
+
+    -- Update winbar
+    require("vscpanel").update_winbar()
+<
+
+Health check: >vim
+    :checkhealth vscpanel
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:

@@ -1,0 +1,94 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        neovim_version: ["stable", "nightly"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.neovim_version }}
+
+      - name: Run tests
+        run: |
+          # Run tests using the same command as justfile
+          nvim --headless -u tests/minimal_init.lua \
+            -c "PlenaryBustedDirectory tests/ { minimal_init = 'tests/minimal_init.lua', output = 'nvim' }" \
+            -c "qa!"
+
+      - name: Generate and validate documentation
+        run: |
+          # Generate help tags
+          nvim --headless -c "helptags doc/" -c "qa!"
+
+          # Validate documentation format
+          echo "Checking documentation format..."
+          grep -q "*vscpanel.txt*" doc/vscpanel.txt && echo "✓ Help file header found" || echo "✗ Missing help file header"
+          grep -q "==============================================================================" doc/vscpanel.txt && echo "✓ Section separators found" || echo "✗ Missing section separators"
+          grep -q "|vscpanel-" doc/vscpanel.txt && echo "✓ Help tags found" || echo "✗ Missing help tags"
+
+          # Test documentation loading
+          nvim --headless -c "helptags doc/" -c "help vscpanel" -c "qa!"
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install Lua
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"
+
+      - name: Install LuaRocks
+        uses: leafo/gh-actions-luarocks@v4
+
+      - name: Install luacheck
+        run: luarocks install luacheck
+
+      - name: Run luacheck
+        run: luacheck lua/ --globals vim
+
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Run health check
+        run: |
+          nvim --headless -u tests/minimal_init.lua \
+            -c "lua require('vscpanel').setup()" \
+            -c "checkhealth vscpanel" \
+            -c "qa!"
+
+  typecheck:
+    name: Type Check Code Base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Type Check Code Base
+        uses: mrcjkb/lua-typecheck-action@v1

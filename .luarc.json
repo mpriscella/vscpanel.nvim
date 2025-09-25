@@ -1,0 +1,31 @@
+{
+  "runtime": {
+    "version": "LuaJIT",
+    "path": [
+      "lua/?.lua",
+      "lua/?/init.lua"
+    ]
+  },
+  "diagnostics": {
+    "globals": [
+      "vim"
+    ]
+  },
+  "workspace": {
+    "library": [
+      "${3rd}/luv/library",
+      "${3rd}/busted/library",
+      "${3rd}/luassert/library"
+    ],
+    "checkThirdParty": false,
+    "maxPreload": 5000,
+    "preloadFileSize": 1000,
+    "useGitIgnore": true
+  },
+  "completion": {
+    "callSnippet": "Both"
+  },
+  "telemetry": {
+    "enable": false
+  }
+}

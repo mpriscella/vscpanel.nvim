@@ -1,0 +1,1 @@
+require("vscpanel.commands").register()
