@@ -1,7 +1,7 @@
 local M = {}
 
 --- Get the current configuration from the main module.
---- @return table Configuration options
+--- @return vscpanel.Config opts
 local function get_opts()
 	local vscpanel = require("vscpanel")
 	local config = require("vscpanel.config")
@@ -31,8 +31,9 @@ end
 --- Creates a terminal and sets it as the active terminal.
 --- @param win number The window to open the terminal buffer in.
 --- @param shell string|nil The shell command.
+--- @return number buffer_id The buffer ID of the new terminal session.
 function M.create_terminal(win, shell)
-	require("vscpanel.views.terminal").setup()
+	-- require("vscpanel.views.terminal").setup()
 	local opts = get_opts()
 	local cmd = shell or opts.shell
 
@@ -57,9 +58,23 @@ function M.create_terminal(win, shell)
 		vim.api.nvim_exec_autocmds("User", {
 			pattern = "WinbarUpdate",
 		})
+
+		vim.api.nvim_create_autocmd("TermClose", {
+			buffer = buf,
+			callback = function(args)
+				if not (args.buf and vim.api.nvim_buf_is_valid(args.buf)) then
+					return
+				end
+
+				M.handle_terminal_removal(args.buf)
+			end,
+			desc = "Clean up vscpanel terminal on close",
+		})
 	else
 		vim.notify("Failed to start " .. cmd .. " terminal", vim.log.levels.ERROR)
 	end
+
+	return buf
 end
 
 --- Close a terminal by line number

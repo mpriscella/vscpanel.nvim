@@ -1,25 +1,25 @@
---- @class panel.Config
---- @field icons panel.Config.Icons? Icon definitions for the plugin.
+--- @class vscpanel.Config
+--- @field icons vscpanel.Config.Icons? Icon definitions for the plugin.
 --- @field shell string? The path to an executable shell.
 --- @field size integer? The size of the panel when the position is "bottom" or "top".
 --- @field position string? The position of the panel. Either "bottom" (default), "top", "left", or "right".
 
---- @class panel.Config.Icons
---- @field panel panel.Config.Icons.Panel?
---- @field terminal panel.Config.Icons.Terminal?
+--- @class vscpanel.Config.Icons
+--- @field panel vscpanel.Config.Icons.Panel?
+--- @field terminal vscpanel.Config.Icons.Terminal?
 
---- @class panel.Config.Icons.Panel
+--- @class vscpanel.Config.Icons.Panel
 --- @field hide_panel string?
 --- @field toggle_panel_size string?
 
---- @class panel.Config.Icons.Terminal
+--- @class vscpanel.Config.Icons.Terminal
 --- @field close_terminal string?
 --- @field help string?
 --- @field launch_profile string?
 --- @field new_terminal string?
 
 local M = {
-	--- @type panel.Config
+	--- @type vscpanel.Config
 	defaults = {
 		size = 18,
 		shell = vim.o.shell,
@@ -42,7 +42,7 @@ local M = {
 
 --- Normalize and validate the passed in opts.
 --- @param opts table|nil User configuration options
---- @return panel.Config config
+--- @return vscpanel.Config config
 function M.normalize(opts)
 	opts = vim.tbl_deep_extend("force", M.defaults, opts or {})
 

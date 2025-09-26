@@ -1,7 +1,7 @@
 local M = {}
 
 --- Setup function.
---- @param opts panel.Config Configuration options.
+--- @param opts vscpanel.Config Configuration options.
 function M.setup(opts)
 	M.opts = require("vscpanel.config").normalize(opts)
 end

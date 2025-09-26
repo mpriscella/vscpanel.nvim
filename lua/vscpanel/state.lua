@@ -1,21 +1,21 @@
 local M = {}
 
---- @class panel.State
+--- @class vscpanel.State
 --- @field window_id number?
---- @field terminals panel.State.Terminal[]
---- @field active_terminal panel.State.Terminal?
+--- @field terminals vscpanel.State.Terminal[]
+--- @field active_terminal vscpanel.State.Terminal?
 --- @field maximized boolean
 --- @field tabs_visible boolean
 --- @field active_view number
 --- @field tabs_window number?
 --- @field tabs_buffer number?
 
---- @class panel.State.Terminal
+--- @class vscpanel.State.Terminal
 --- @field buffer number
 --- @field label string
 --- @field shell string
 
---- @type panel.State
+--- @type vscpanel.State
 local state = {
 	window_id = nil,
 	terminals = {},
@@ -71,7 +71,7 @@ actions.set_active_view = function(view)
 	return true
 end
 
---- @param terminal panel.State.Terminal
+--- @param terminal vscpanel.State.Terminal
 --- @return boolean result
 --- @return string? error_msg
 actions.add_terminal = function(terminal)
@@ -257,12 +257,12 @@ function M.window_id()
 	return state.window_id
 end
 
---- @return panel.State.Terminal[] terminals
+--- @return vscpanel.State.Terminal[] terminals
 function M.terminals()
 	return vim.deepcopy(state.terminals)
 end
 
---- @return panel.State.Terminal active_terminal
+--- @return vscpanel.State.Terminal active_terminal
 function M.active_terminal()
 	return state.active_terminal
 end

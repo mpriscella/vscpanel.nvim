@@ -23,9 +23,6 @@ describe("vscpanel auto-insert functionality", function()
 			local panel_win = state.window_id()
 			assert.is.Not.Nil(panel_win, "Panel window should be created")
 
-			-- Wait for terminal setup
-			vim.wait(50)
-
 			local current_buf = vim.api.nvim_get_current_buf()
 			assert.are.equal("terminal", vim.bo[current_buf].buftype, "Should be in a terminal buffer")
 
@@ -53,7 +50,6 @@ describe("vscpanel auto-insert functionality", function()
 
 			-- Open panel and wait for initial terminal
 			panel.toggle_panel()
-			vim.wait(50)
 
 			local panel_win = state.window_id()
 			assert.is.Not.Nil(panel_win, "Panel window should be created")
@@ -61,7 +57,6 @@ describe("vscpanel auto-insert functionality", function()
 			-- Create additional terminal (use nil for default shell)
 			local terminal = require("vscpanel.views.terminal")
 			terminal.create_terminal(panel_win, nil)
-			vim.wait(50)
 
 			local terminals = state.terminals()
 
@@ -94,7 +89,6 @@ describe("vscpanel auto-insert functionality", function()
 
 			-- Open a terminal panel
 			panel.toggle_panel()
-			vim.wait(50)
 
 			local current_buf = vim.api.nvim_get_current_buf()
 			local augroup_name = "vscpanel_auto_insert_" .. current_buf
@@ -130,7 +124,6 @@ describe("vscpanel auto-insert functionality", function()
 
 			-- Open a terminal panel
 			panel.toggle_panel()
-			vim.wait(50)
 
 			local current_buf = vim.api.nvim_get_current_buf()
 			assert.are.equal("terminal", vim.bo[current_buf].buftype, "Should be in terminal buffer")
@@ -141,11 +134,9 @@ describe("vscpanel auto-insert functionality", function()
 			-- Trigger BufEnter by switching away and back
 			local temp_buf = vim.api.nvim_create_buf(false, true)
 			vim.api.nvim_set_current_buf(temp_buf)
-			vim.wait(10)
 
 			-- Switch back to terminal (should trigger BufEnter)
 			vim.api.nvim_set_current_buf(current_buf)
-			vim.wait(10)
 
 			-- Restore original function
 			package.loaded["vscpanel"].ensure_insert = original_ensure_insert

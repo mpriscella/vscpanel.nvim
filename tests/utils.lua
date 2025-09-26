@@ -19,8 +19,10 @@ function M.cleanup()
 	package.loaded["vscpanel.winbar"] = nil
 	package.loaded["vscpanel.views.problems"] = nil
 	package.loaded["vscpanel.views.terminal"] = nil
-	package.loaded["vscpanel.views.terminal.shell-picker"] = nil
+	package.loaded["vscpanel.views.terminal.context_menu"] = nil
 	package.loaded["vscpanel.views.terminal.tabs"] = nil
+
+	-- TODO: Should iterate over terminals and delete them if they exist.
 
 	-- TODO: A hardcoded string shouldn't be passed in. Instead the autocmd group
 	-- name should be pulled from a shared location, like config or something.

@@ -7,7 +7,7 @@
 local M = {}
 
 --- Get the current configuration from the main module
---- @return table: Configuration options
+--- @return vscpanel.Config opts Configuration options
 local function get_opts()
 	local vscpanel = require("vscpanel")
 	local config = require("vscpanel.config")
@@ -49,7 +49,7 @@ function M.setup()
 			require("vscpanel.panel").close_panel()
 		end,
 		launch_profile = function()
-			require("vscpanel.views.terminal.shell-picker").toggle()
+			require("vscpanel.views.terminal.context_menu").toggle()
 		end,
 		toggle_panel_size = function()
 			require("vscpanel").max_toggle()

@@ -35,6 +35,7 @@ A VSCode style panel for Neovim.
       function()
         require("vscpanel.panel").toggle_panel()
       end,
+      desc = "[T]oggle Panel",
     },
     {
       "<leader> ",
@@ -47,7 +48,7 @@ A VSCode style panel for Neovim.
       "<leader>s",
       mode = { "n", "t" },
       function()
-        require("vscpanel.views.terminal.shell-picker").open()
+        require("vscpanel.views.terminal.context_menu").open()
       end,
     },
   },
@@ -122,7 +123,7 @@ require("vscpanel").setup({
 ### Default Keymaps
 
 - `<leader>t` - Toggle terminal panel
-- `<leader> ` - Maximize/minimize terminal panel
+- `<leader>` - Maximize/minimize terminal panel
 - `<leader>s` - Show terminal menu (when in terminal)
 - `g?` - Show help (when in terminal or terminal tabs)
 

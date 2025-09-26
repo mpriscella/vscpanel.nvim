@@ -1,7 +1,9 @@
+--- TODO: - Move this to terminal_tabs_spec.lua
+
 local assert = require("luassert")
 local helpers = require("tests.utils")
 
-describe("vscpanel terminal rename functionality", function()
+describe("rename", function()
 	local vscpanel, state
 
 	before_each(function()

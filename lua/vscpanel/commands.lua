@@ -1,11 +1,11 @@
 local M = {}
 
---- @class panel.Command
+--- @class vscpanel.Command
 --- @field name string
 --- @field opts table
 --- @field command function
 
---- @type panel.Command[]
+--- @type vscpanel.Command[]
 local commands = {
 	{
 		name = "TogglePanel",
@@ -31,7 +31,7 @@ local commands = {
 			desc = "Show Terminal Menu",
 		},
 		command = function()
-			require("vscpanel.views.terminal.shell-picker").open()
+			require("vscpanel.views.terminal.context_menu").open()
 		end,
 	},
 	{

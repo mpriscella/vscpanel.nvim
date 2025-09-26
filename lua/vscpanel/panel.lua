@@ -1,7 +1,7 @@
 local M = {}
 
 --- Get the current configuration from the main module
---- @return panel.Config
+--- @return vscpanel.Config
 local function get_config()
 	local vscpanel = require("vscpanel")
 	local config = require("vscpanel.config")
@@ -9,14 +9,14 @@ local function get_config()
 	return vscpanel.opts or config.defaults
 end
 
---- @class panel.CreatePanelArgs
+--- @class vscpanel.CreatePanelArgs
 --- @field position string? The position of the panel. Either "bottom"
 ---   (default), "top", "left", or "right".
 --- @field size number? The size of the panel when the position is "bottom" or
 ---   "top"
 
 --- Creates a panel without a buffer attached.
---- @param args panel.CreatePanelArgs
+--- @param args vscpanel.CreatePanelArgs
 --- @return number win The window ID of the newly created panel.
 function M.create_panel(args)
 	local defaults = require("vscpanel.config").defaults

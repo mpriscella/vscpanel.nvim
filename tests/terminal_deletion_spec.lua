@@ -107,7 +107,6 @@ describe("vscpanel terminal deletion functionality", function()
 		it("hides tabs when only one terminal remains after deletion", function()
 			-- Open panel and create multiple terminals
 			panel.toggle_panel()
-			vim.wait(50)
 
 			local panel_win = state.window_id() or vim.api.nvim_get_current_win()
 
@@ -115,19 +114,16 @@ describe("vscpanel terminal deletion functionality", function()
 			local initial_terminals = state.terminals()
 			while #initial_terminals < 2 do
 				terminal.create_terminal(panel_win, "bash")
-				vim.wait(50)
 				initial_terminals = state.terminals()
 			end
 
 			-- Show tabs
 			tabs.show_tabs()
-			vim.wait(50)
 			assert.is_true(tabs.are_open(), "Tabs should be open initially")
 
 			-- Delete one terminal using the close_terminal function directly
 			-- (simulating what the 'd' key should do)
 			terminal.close_terminal(1)
-			vim.wait(100)
 
 			-- Verify only one terminal remains
 			local remaining_terminals = state.terminals()
@@ -140,7 +136,6 @@ describe("vscpanel terminal deletion functionality", function()
 		it("updates tabs display when multiple terminals remain after deletion", function()
 			-- Open panel
 			panel.toggle_panel()
-			vim.wait(50)
 
 			local panel_win = state.window_id() or vim.api.nvim_get_current_win()
 
@@ -148,7 +143,6 @@ describe("vscpanel terminal deletion functionality", function()
 			local initial_terminals = state.terminals()
 			while #initial_terminals < 3 do
 				terminal.create_terminal(panel_win, "bash")
-				vim.wait(50)
 				initial_terminals = state.terminals()
 			end
 
@@ -157,12 +151,10 @@ describe("vscpanel terminal deletion functionality", function()
 
 			-- Show tabs
 			tabs.show_tabs()
-			vim.wait(50)
 			assert.is_true(tabs.are_open(), "Tabs should be open")
 
 			-- Delete one terminal
 			terminal.close_terminal(2) -- Delete the middle terminal
-			vim.wait(100)
 
 			-- Verify we have one less terminal
 			local remaining_terminals = state.terminals()
@@ -179,7 +171,6 @@ describe("vscpanel terminal deletion functionality", function()
 		it("handles deleting the active terminal correctly", function()
 			-- Open panel
 			panel.toggle_panel()
-			-- vim.wait(50)
 
 			local panel_win = state.window_id() or vim.api.nvim_get_current_win()
 
@@ -187,7 +178,6 @@ describe("vscpanel terminal deletion functionality", function()
 			local initial_terminals = state.terminals()
 			while #initial_terminals < 2 do
 				terminal.create_terminal(panel_win, "bash")
-				-- vim.wait(50)
 				initial_terminals = state.terminals()
 			end
 			local active_terminal = state.active_terminal()
@@ -205,7 +195,6 @@ describe("vscpanel terminal deletion functionality", function()
 
 			-- Delete the active terminal
 			terminal.close_terminal(active_line)
-			vim.wait(100)
 
 			-- Verify the terminal was deleted
 			local remaining_terminals = state.terminals()
