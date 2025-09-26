@@ -26,10 +26,7 @@ A VSCode style panel for Neovim.
 {
   "mpriscella/vscpanel.nvim",
   config = function()
-    require("vscpanel").setup({
-      size = 18,
-      position = "bottom"
-    })
+    require("vscpanel").setup({})
   end,
   keys = {
     {
@@ -84,25 +81,34 @@ require("vscpanel").setup({
   size = 18,                    -- Panel height/width
   shell = vim.o.shell,          -- Shell to use
   position = "bottom",          -- "bottom", "top", "left", "right"
-  icons = {                     -- Icons configuration
-    close_terminal = "",        -- Icon for close terminal action.
-    help = "󰋖",                 -- Icon for help command.
-    hide_panel = "",           -- Icon for hiding panel action.
-    launch_profile = "",       -- Icon for profile launching.
-    toggle_panel_size = " ",   -- Icon for panel resizing.
-    new_terminal = "",         -- Icon for new terminal.
-  }
+  icons = {
+    panel = {
+      hide_panel = "",
+      toggle_panel_size = " ",
+    },
+    terminal = {
+      close_terminal = "",
+      help = "󰋖",
+      launch_profile = "",
+      new_terminal = "",
+    },
+  },
 })
 ```
 
 ### Configuration Options
 
-| Option           | Type      | Default       | Description                                                    |
-| ---------------- | --------- | ------------- | -------------------------------------------------------------- |
-| `size`           | `number`  | `18`          | Height (for bottom/top) or width (for left/right) of the panel |
-| `shell`          | `string`  | `vim.o.shell` | Shell command to use for terminals                             |
-| `position`       | `string`  | `"bottom"`    | Panel position: `"bottom"`, `"top"`, `"left"`, `"right"`       |
-| `winbar.enabled` | `boolean` | `true`        | Show the winbar with controls                                  |
+| Option                          | Type     | Default       | Description                                                                      |
+| ------------------------------- | -------- | ------------- | -------------------------------------------------------------------------------- |
+| `shell`                         | `string` | `vim.o.shell` | The path to an executable shell.                                                 |
+| `size`                          | `number` | `18`          | The size of the panel when the position is "bottom" or "top".                    |
+| `position`                      | `string` | `"bottom"`    | The position of the panel. Either "bottom" (default), "top", "left", or "right". |
+| `icons.panel.hide_panel`        | `string` | `""`         |                                                                                  |
+| `icons.panel.toggle_panel_size` | `string` | `" "`        |                                                                                  |
+| `icons.terminal.close_terminal` | `string` | `""`          |                                                                                  |
+| `icons.terminal.help`           | `string` | `"󰋖"`         |                                                                                  |
+| `icons.terminal.launch_profile` | `string` | `""`         |                                                                                  |
+| `icons.terminal.new_terminal`   | `string` | `""`         |                                                                                  |
 
 ## Usage
 
@@ -120,65 +126,12 @@ require("vscpanel").setup({
 - `<leader>s` - Show terminal menu (when in terminal)
 - `g?` - Show help (when in terminal or terminal tabs)
 
-### API Functions
-
-```lua
--- Toggle panel
-require("vscpanel.panel").toggle_panel()
-
--- Maximize/minimize
-require("vscpanel").max_toggle()
-
--- Show help
-require("vscpanel").show_help()
-
--- Update winbar
-require("vscpanel").update_winbar()
-```
-
 ## Examples
 
 ### Basic Setup
 
 ```lua
 require("vscpanel").setup()
-```
-
-### Right-side Panel
-
-```lua
-require("vscpanel").setup({
-  size = 80,
-  position = "right",
-})
-```
-
-### Top Panel
-
-```lua
-require("vscpanel").setup({
-  size = 15,
-  position = "top",
-})
-```
-
-### Custom Shell and Behavior
-
-```lua
-require("vscpanel").setup({
-  size = 25,
-  shell = "/bin/zsh",
-})
-```
-
-### Disable Winbar
-
-```lua
-require("vscpanel").setup({
-  winbar = {
-    enabled = false
-  }
-})
 ```
 
 ## Development
@@ -190,29 +143,3 @@ Run tests with:
 ```bash
 just test
 ```
-
-### Health Check
-
-Check plugin health:
-
-```vim
-:checkhealth vscpanel
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite
-6. Submit a pull request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## Acknowledgments
-
-- Built with [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) for testing
-- Inspired by various terminal plugins in the Neovim ecosystem

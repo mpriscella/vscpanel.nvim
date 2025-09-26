@@ -20,6 +20,9 @@ function M.setup()
 	local state = require("vscpanel.state")
 	local constants = require("vscpanel.constants")
 
+	vim.api.nvim_set_hl(0, "WinBar", { link = "Normal" })
+	vim.api.nvim_set_hl(0, "WinBarNC", { link = "NormalNC" })
+
 	local aug = vim.api.nvim_create_augroup("vscpanel.nvim", { clear = true })
 	vim.api.nvim_create_autocmd("User", {
 		group = aug,
@@ -125,7 +128,7 @@ local function help_icon()
 		"%@v:lua.",
 		constants.NAMESPACE,
 		".help",
-		"@" .. icon .. "%T",
+		"@" .. icon .. " %T",
 	})
 end
 
