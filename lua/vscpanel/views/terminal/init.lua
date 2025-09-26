@@ -54,6 +54,9 @@ function M.create_terminal(win, shell)
 
 		require("vscpanel.keybinds").setup_terminal_keybinds(buf)
 		require("vscpanel.views.terminal.tabs").refresh_tabs()
+		vim.api.nvim_exec_autocmds("User", {
+			pattern = "WinbarUpdate",
+		})
 	else
 		vim.notify("Failed to start " .. cmd .. " terminal", vim.log.levels.ERROR)
 	end

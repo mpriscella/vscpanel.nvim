@@ -87,7 +87,7 @@ function M.show_help()
 		style = "minimal",
 		focusable = true,
 		noautocmd = true,
-		title = " PanelTerm Help ",
+		title = "VSCPanel - Terminal Help",
 		title_pos = "center",
 	})
 
