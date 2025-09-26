@@ -3,7 +3,7 @@ local M = {}
 --- @class panel.State
 --- @field window_id number?
 --- @field terminals panel.State.Terminal[]
---- @field active_terminal number?
+--- @field active_terminal panel.State.Terminal?
 --- @field maximized boolean
 --- @field tabs_visible boolean
 --- @field active_view number
@@ -13,6 +13,7 @@ local M = {}
 --- @class panel.State.Terminal
 --- @field buffer number
 --- @field label string
+--- @field shell string
 
 --- @type panel.State
 local state = {
@@ -70,29 +71,22 @@ actions.set_active_view = function(view)
 	return true
 end
 
---- @param buffer_id number
---- @param label string
+--- @param terminal panel.State.Terminal
 --- @return boolean result
 --- @return string? error_msg
-actions.add_terminal = function(buffer_id, label)
-	if not validate_buffer(buffer_id) then
+actions.add_terminal = function(terminal)
+	if not validate_buffer(terminal.buffer) then
 		return false, "Invalid buffer ID"
 	end
 
 	-- Check for duplicates
-	for _, terminal in ipairs(state.terminals) do
-		if terminal.buffer == buffer_id then
+	for _, t in ipairs(state.terminals) do
+		if t.buffer == terminal.buffer then
 			return false, "Terminal already exists"
 		end
 	end
 
-	--- @type panel.State.Terminal
-	local new_terminal = {
-		buffer = buffer_id,
-		label = label or ("Terminal " .. #state.terminals + 1),
-	}
-
-	table.insert(state.terminals, new_terminal)
+	table.insert(state.terminals, terminal)
 
 	return true
 end
@@ -136,23 +130,34 @@ actions.remove_terminal = function(buffer_id)
 		if new_index < 1 then
 			new_index = 1
 		end
-		state.active_terminal = state.terminals[new_index].buffer
+		state.active_terminal = state.terminals[new_index]
 	end
 
 	return true
 end
 
 --- Sets the active terminal.
---- @param buffer_id number
+--- @param buffer_id number|nil
 --- @return boolean result
 --- @return string? error_msg
 actions.set_active_terminal = function(buffer_id)
-	if buffer_id and not validate_buffer(buffer_id) then
+	if buffer_id == nil then
+		state.active_terminal = nil
+		return true
+	end
+
+	if not validate_buffer(buffer_id) then
 		return false, "Invalid buffer ID"
 	end
 
-	state.active_terminal = buffer_id
-	return true
+	for _, terminal in ipairs(state.terminals) do
+		if terminal.buffer == buffer_id then
+			state.active_terminal = terminal
+			return true
+		end
+	end
+
+	return false, "Terminal not found"
 end
 
 --- Sets the label for a given terminal buffer.
@@ -218,7 +223,7 @@ actions.cleanup_invalid = function()
 	state.terminals = valid_terminals
 
 	-- Clean invalid active terminal
-	if state.active_terminal and not validate_buffer(state.active_terminal) then
+	if state.active_terminal and not validate_buffer(state.active_terminal.buffer) then
 		state.active_terminal = nil
 		cleaned = cleaned + 1
 	end
@@ -257,7 +262,7 @@ function M.terminals()
 	return vim.deepcopy(state.terminals)
 end
 
---- @return number active_terminal
+--- @return panel.State.Terminal active_terminal
 function M.active_terminal()
 	return state.active_terminal
 end

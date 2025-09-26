@@ -2,13 +2,13 @@
 
 [![Tests](https://github.com/mpriscella/vscpanel.nvim/actions/workflows/test.yaml/badge.svg)](https://github.com/mpriscella/vscpanel.nvim/actions/workflows/test.yaml)
 
-A toggleable terminal panel for Neovim with maximize/minimize functionality.
+A VSCode style panel for Neovim.
 
 ## Features
 
-- **Toggle terminal panel** - Show/hide terminal panel with a simple command
-- **Maximize/minimize** - Toggle between panel and full-window modes
-- **Dynamic winbar** - Visual controls with contextual icons
+- **Toggleable panel** - Show/hide panel with a simple command
+- **Maximize/minimize panel** - Toggle between panel and full-window modes
+- **Dynamic winbar** - Visual controls with contextual nerdfont icons
 - **Flexible positioning** - Bottom, top, left, or right panel placement
 - **Robust state management** - Handles multiple terminals and window states
 - **Extensive configuration** - Customize size, position, shell, and behavior
@@ -33,24 +33,24 @@ A toggleable terminal panel for Neovim with maximize/minimize functionality.
   end,
   keys = {
     {
-      '<leader>t',
-      mode = { 'n', 't' },
+      "<leader>t",
+      mode = { "n", "t" },
       function()
-        require('vscpanel.panel').toggle_panel()
+        require("vscpanel.panel").toggle_panel()
       end,
     },
     {
-      '<leader> ',
-      mode = { 'n', 't' },
+      "<leader> ",
+      mode = { "n", "t" },
       function()
-        require('vscpanel').max_toggle()
+        require("vscpanel").max_toggle()
       end,
     },
     {
-      '<leader>s',
-      mode = { 'n', 't' },
+      "<leader>s",
+      mode = { "n", "t" },
       function()
-        require('vscpanel.views.terminal.shell-picker').open()
+        require("vscpanel.views.terminal.shell-picker").open()
       end,
     },
   },
@@ -71,7 +71,7 @@ use {
 ### vim-plug
 
 ```vim
-Plug 'mpriscella/vscpanel.nvim'
+Plug "mpriscella/vscpanel.nvim"
 lua require("vscpanel").setup()
 ```
 
@@ -84,9 +84,14 @@ require("vscpanel").setup({
   size = 18,                    -- Panel height/width
   shell = vim.o.shell,          -- Shell to use
   position = "bottom",          -- "bottom", "top", "left", "right"
-  winbar = {
-    enabled = true,             -- Show winbar
-  },
+  icons = {                     -- Icons configuration
+    close_terminal = "",        -- Icon for close terminal action.
+    help = "󰋖",                 -- Icon for help command.
+    hide_panel = "",           -- Icon for hiding panel action.
+    launch_profile = "",       -- Icon for profile launching.
+    toggle_panel_size = " ",   -- Icon for panel resizing.
+    new_terminal = "",         -- Icon for new terminal.
+  }
 })
 ```
 

@@ -51,7 +51,7 @@ function M.show_tabs()
 	local active_line = 1 -- Default to first line
 	for i, t in ipairs(terminals) do
 		if t.buffer and vim.api.nvim_buf_is_valid(t.buffer) then
-			local is_active = (active_terminal and t.buffer == active_terminal)
+			local is_active = (active_terminal and t.buffer == active_terminal.buffer)
 			if is_active then
 				-- Highlight the blue indicator
 				vim.api.nvim_buf_add_highlight(buf, -1, "DiagnosticInfo", i - 1, 0, 1)
@@ -221,7 +221,7 @@ function M.refresh_tabs()
 		local active_line = 1
 		for i, terminal in ipairs(terminals) do
 			if terminal.buffer and vim.api.nvim_buf_is_valid(terminal.buffer) then
-				if active_terminal and terminal.buffer == active_terminal then
+				if active_terminal and terminal.buffer == active_terminal.buffer then
 					vim.api.nvim_buf_add_highlight(tabs_buffer, HL_NS, "DiagnosticInfo", i - 1, 0, 1)
 					active_line = i
 				end
@@ -282,7 +282,7 @@ function M.generate_tabs_content()
 			end
 
 			-- Check if this is the active terminal
-			local is_active = (active_terminal and terminal.buffer == active_terminal)
+			local is_active = (active_terminal and terminal.buffer == active_terminal.buffer)
 			local indicator = is_active and "│" or " "
 
 			-- Add close icon with right justification

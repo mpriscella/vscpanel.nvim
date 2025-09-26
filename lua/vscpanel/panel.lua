@@ -115,11 +115,11 @@ function M.toggle_panel()
 
 		-- Create View (if it doesn't already exist)
 		if active_view == views.views.TERMINAL then
-			local active_buffer = state.active_terminal()
+			local active_terminal = state.active_terminal()
 
-			if active_buffer and vim.api.nvim_buf_is_valid(active_buffer) then
-				vim.api.nvim_win_set_buf(new_win, active_buffer)
-				require("vscpanel.keybinds").setup_terminal_keybinds(active_buffer)
+			if active_terminal and vim.api.nvim_buf_is_valid(active_terminal.buffer) then
+				vim.api.nvim_win_set_buf(new_win, active_terminal.buffer)
+				require("vscpanel.keybinds").setup_terminal_keybinds(active_terminal.buffer)
 			else
 				require("vscpanel.views.terminal").create_terminal(new_win)
 			end

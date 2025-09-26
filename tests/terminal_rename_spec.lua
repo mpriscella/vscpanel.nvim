@@ -27,7 +27,7 @@ describe("vscpanel terminal rename functionality", function()
 			local buf = vim.api.nvim_create_buf(false, true)
 
 			-- Add terminal to state
-			state.dispatch("add_terminal", buf, vim.fs.basename(vim.o.shell))
+			state.dispatch("add_terminal", { buffer = buf, label = vim.fs.basename(vim.o.shell), shell = vim.o.shell })
 
 			-- Verify initial label is the shell basename (not full path)
 			local _, initial_label = state.terminal_label(buf)
@@ -71,14 +71,15 @@ describe("vscpanel terminal rename functionality", function()
 			end
 
 			-- Add to state and set custom label if provided
-			-- state.add_terminal(mock_buf)
-			state.dispatch("add_terminal", mock_buf, vim.fs.basename(vim.o.shell))
+			state.dispatch(
+				"add_terminal",
+				{ buffer = mock_buf, label = vim.fs.basename(vim.o.shell), shell = vim.o.shell }
+			)
 			if custom_label then
 				state.dispatch("set_terminal_label", mock_buf, custom_label)
 			end
 
 			-- Get the actual display name using the state function
-			-- local display_name = state.get_terminal_label(mock_buf)
 			local _, display_name = state.terminal_label(mock_buf)
 
 			-- Clean up
@@ -98,8 +99,10 @@ describe("vscpanel terminal rename functionality", function()
 			end
 
 			-- Add to state and set custom label if provided
-			-- state.add_terminal(mock_buf)
-			state.dispatch("add_terminal", mock_buf, vim.fs.basename(vim.o.shell))
+			state.dispatch(
+				"add_terminal",
+				{ buffer = mock_buf, label = vim.fs.basename(vim.o.shell), shell = vim.o.shell }
+			)
 			if custom_label then
 				state.dispatch("set_terminal_label", mock_buf, custom_label)
 			end
@@ -151,14 +154,14 @@ describe("vscpanel terminal rename functionality", function()
 			assert.equals("My Custom Terminal", display_name)
 		end)
 
+		--- TODO: Should we allow no custom label? It should always have a label.
 		it("generate_terminal_lines falls back to buffer name when no custom label", function()
 			-- Create a mock terminal state
 			local mock_buf = vim.api.nvim_create_buf(false, true)
 			vim.api.nvim_buf_set_name(mock_buf, "/path/to/test.lua")
 
 			-- Add to state (this sets label to vim.o.shell by default)
-			-- state.add_terminal(mock_buf)
-			state.dispatch("add_terminal", mock_buf)
+			state.dispatch("add_terminal", { buffer = mock_buf, shell = vim.o.shell })
 
 			-- Now clear the label to simulate the case where there's no custom label
 			local terminals = state.terminals()
@@ -188,8 +191,7 @@ describe("vscpanel terminal rename functionality", function()
 			-- Don't set buffer name
 
 			-- Add to state (this sets label to vim.o.shell by default)
-			-- state.add_terminal(mock_buf)
-			state.dispatch("add_terminal", mock_buf)
+			state.dispatch("add_terminal", { buffer = mock_buf, shell = vim.o.shell })
 
 			-- Now clear the label to simulate the case where there's no custom label
 			local terminals = state.terminals()
@@ -226,9 +228,9 @@ describe("vscpanel terminal rename functionality", function()
 			vim.api.nvim_buf_set_name(buf3, "/path/to/file3.lua")
 
 			-- Add to state
-			state.dispatch("add_terminal", buf1, vim.fs.basename(vim.o.shell))
-			state.dispatch("add_terminal", buf2, vim.fs.basename(vim.o.shell))
-			state.dispatch("add_terminal", buf3, vim.fs.basename(vim.o.shell))
+			state.dispatch("add_terminal", { buffer = buf1, label = vim.fs.basename(vim.o.shell), shell = vim.o.shell })
+			state.dispatch("add_terminal", { buffer = buf2, label = vim.fs.basename(vim.o.shell), shell = vim.o.shell })
+			state.dispatch("add_terminal", { buffer = buf3, label = vim.fs.basename(vim.o.shell), shell = vim.o.shell })
 
 			-- Set custom labels for some
 			state.dispatch("set_terminal_label", buf1, "Frontend Dev")
@@ -259,8 +261,8 @@ describe("vscpanel terminal rename functionality", function()
 			local buf1 = vim.api.nvim_create_buf(false, true)
 			local buf2 = vim.api.nvim_create_buf(false, true)
 
-			state.dispatch("add_terminal", buf1, vim.fs.basename(vim.o.shell))
-			state.dispatch("add_terminal", buf2, vim.fs.basename(vim.o.shell))
+			state.dispatch("add_terminal", { buffer = buf1, label = vim.fs.basename(vim.o.shell), shell = vim.o.shell })
+			state.dispatch("add_terminal", { buffer = buf2, label = vim.fs.basename(vim.o.shell), shell = vim.o.shell })
 
 			-- Set custom labels
 			state.dispatch("set_terminal_label", buf1, "Terminal One")

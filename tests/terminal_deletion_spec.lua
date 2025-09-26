@@ -196,7 +196,7 @@ describe("vscpanel terminal deletion functionality", function()
 			-- Find which line number corresponds to the active terminal
 			local active_line = nil
 			for i, term in ipairs(initial_terminals) do
-				if term.buffer == active_terminal then
+				if term.buffer == active_terminal.buffer then
 					active_line = i
 					break
 				end
@@ -218,10 +218,10 @@ describe("vscpanel terminal deletion functionality", function()
 			-- Verify a new active terminal was set
 			local new_active_terminal = state.active_terminal()
 			assert.is.Not.Nil(new_active_terminal, "Should have a new active terminal")
-			assert.Not.equal(active_terminal, new_active_terminal, "Active terminal should have changed")
+			assert.Not.equal(active_terminal.buffer, new_active_terminal.buffer, "Active terminal should have changed")
 
 			-- Verify the new active terminal is valid
-			assert.is_true(vim.api.nvim_buf_is_valid(new_active_terminal), "New active terminal should be valid")
+			assert.is_true(vim.api.nvim_buf_is_valid(new_active_terminal.buffer), "New active terminal should be valid")
 		end)
 
 		it("handles terminal deletion through TermClose autocmd", function()
