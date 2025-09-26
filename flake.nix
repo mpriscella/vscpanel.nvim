@@ -36,8 +36,7 @@
               nvim \
                 -u $(pwd)/tests/minimal_init.lua \
                 -i NONE \
-                --cmd "set rtp+=$(pwd)" \
-                -c "lua pcall(require, 'vscpanel')"
+                --cmd "set rtp+=$(pwd)"
             '')
           ];
         };
