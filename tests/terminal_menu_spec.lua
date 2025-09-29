@@ -32,7 +32,7 @@ describe("vscpanel shell picker menu functionality", function()
 
 	describe("menu functionality", function()
 		it("menu module has toggle function", function()
-			local menu = require("vscpanel.views.terminal.shell-picker")
+			local menu = require("vscpanel.views.terminal.context_menu")
 			assert.is_function(menu.toggle)
 		end)
 	end)

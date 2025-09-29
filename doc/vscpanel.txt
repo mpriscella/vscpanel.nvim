@@ -68,7 +68,7 @@ Using lazy.nvim: >lua
           '<leader>s',
           mode = { 'n', 't' },
           function()
-            require('vscpanel.views.terminal.shell-picker').open()
+            require('vscpanel.views.terminal.context_menu').open()
           end,
         },
       },

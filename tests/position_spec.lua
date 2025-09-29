@@ -13,7 +13,6 @@ describe("vscpanel position", function()
 		local initial_win = vim.api.nvim_get_current_win()
 
 		require("vscpanel.panel").toggle_panel()
-		vim.wait(100)
 
 		local panel_win = vim.api.nvim_get_current_win()
 		local height = vim.api.nvim_win_get_height(panel_win)
@@ -38,7 +37,6 @@ describe("vscpanel position", function()
 		local reference_win = vim.api.nvim_get_current_win()
 
 		require("vscpanel.panel").toggle_panel()
-		vim.wait(100)
 
 		local panel_win = vim.api.nvim_get_current_win()
 		local height = vim.api.nvim_win_get_height(panel_win)
@@ -62,7 +60,6 @@ describe("vscpanel position", function()
 		local initial_win = vim.api.nvim_get_current_win()
 
 		require("vscpanel.panel").toggle_panel()
-		vim.wait(100)
 
 		local panel_win = vim.api.nvim_get_current_win()
 		local width = vim.api.nvim_win_get_width(panel_win)
@@ -87,7 +84,6 @@ describe("vscpanel position", function()
 		local initial_win = vim.api.nvim_get_current_win()
 
 		require("vscpanel.panel").toggle_panel()
-		vim.wait(100)
 
 		local panel_win = vim.api.nvim_get_current_win()
 		local width = vim.api.nvim_win_get_width(panel_win)
@@ -112,7 +108,6 @@ describe("vscpanel position", function()
 		local initial_win = vim.api.nvim_get_current_win()
 
 		require("vscpanel.panel").toggle_panel()
-		vim.wait(100)
 
 		local panel_win = vim.api.nvim_get_current_win()
 		local height = vim.api.nvim_win_get_height(panel_win)

@@ -2,7 +2,7 @@ local M = {}
 local HL_NS = vim.api.nvim_create_namespace("VSCPanelTabs")
 
 --- Get the current configuration from the main module.
---- @return table Configuration options
+--- @return vscpanel.Config opts
 local function get_opts()
 	local vscpanel = require("vscpanel")
 	local config = require("vscpanel.config")
@@ -287,7 +287,7 @@ function M.generate_tabs_content()
 
 			-- Add close icon with right justification
 			local opts = get_opts()
-			local close_icon = opts.icons.close_terminal or ""
+			local close_icon = opts.icons.terminal.close_terminal or ""
 			if close_icon ~= "" then
 				local padding = string.rep(" ", math.max(1, 20 - #display_name))
 				lines[i] = string.format("%s  %s%s%s", indicator, display_name, padding, close_icon)

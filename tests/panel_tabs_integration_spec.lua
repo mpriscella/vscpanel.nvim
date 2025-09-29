@@ -73,7 +73,6 @@ describe("vscpanel panel-tabs integration", function()
 
 		-- Open panel
 		panel.toggle_panel()
-		vim.wait(50) -- Give time for the panel to be created
 
 		-- Debug: check current window
 		local current_win = vim.api.nvim_get_current_win()
@@ -91,7 +90,6 @@ describe("vscpanel panel-tabs integration", function()
 		-- Use current window as fallback if state doesn't have window ID
 		local actual_win = panel_win or vim.api.nvim_get_current_win()
 		terminal.create_terminal(actual_win, "bash")
-		vim.wait(50)
 
 		-- Verify tabs are open
 		assert.is_true(tabs.are_open())
@@ -102,7 +100,6 @@ describe("vscpanel panel-tabs integration", function()
 
 		-- Reopen panel
 		panel.toggle_panel()
-		vim.wait(50)
 
 		-- Verify tabs are restored
 		assert.is_true(tabs.are_open())
@@ -112,7 +109,6 @@ describe("vscpanel panel-tabs integration", function()
 		vscpanel.setup({})
 
 		panel.toggle_panel()
-		vim.wait(50) -- Give time for the panel to be created
 
 		-- Debug: check current window
 		local current_win = vim.api.nvim_get_current_win()
@@ -135,14 +131,12 @@ describe("vscpanel panel-tabs integration", function()
 			local actual_win = panel_win or vim.api.nvim_get_current_win()
 			vim.api.nvim_win_set_buf(actual_win, buf)
 			state.dispatch("add_terminal", { buffer = buf, label = "bash", shell = "/bin/bash" })
-			vim.wait(10)
 			terminals = state.terminals()
 		end
 		assert.are.equal(1, #terminals, "Expected 1 terminal, got " .. #terminals)
 
 		-- Ensure tabs are hidden since this test expects them to not be shown with only one terminal
 		tabs.hide()
-		vim.wait(10)
 		assert.is_false(tabs.are_open())
 
 		-- Close panel
@@ -150,7 +144,6 @@ describe("vscpanel panel-tabs integration", function()
 
 		-- Reopen panel
 		panel.toggle_panel()
-		vim.wait(50)
 
 		-- Verify tabs are still not shown (since we only have one terminal and they weren't previously open)
 		assert.is_false(tabs.are_open())
@@ -172,7 +165,6 @@ describe("vscpanel panel-tabs integration", function()
 		-- Create multiple terminals but manually hide tabs
 		terminal.create_terminal(panel_win, "bash")
 		tabs.hide() -- Manually hide tabs
-		vim.wait(50)
 
 		-- Verify tabs are hidden despite multiple terminals
 		assert.is_false(tabs.are_open())
@@ -180,7 +172,6 @@ describe("vscpanel panel-tabs integration", function()
 		-- Close and reopen panel
 		panel.toggle_panel()
 		panel.toggle_panel()
-		vim.wait(50)
 
 		-- Verify tabs are shown due to multiple terminals
 		assert.is_true(tabs.are_open())
@@ -197,7 +188,6 @@ describe("vscpanel panel-tabs integration", function()
 			panel_win = vim.api.nvim_get_current_win()
 		end
 		terminal.create_terminal(panel_win, "bash")
-		vim.wait(50)
 		assert.is_true(tabs.are_open())
 
 		-- Close panel
@@ -206,7 +196,6 @@ describe("vscpanel panel-tabs integration", function()
 
 		-- Cycle 2: Reopen and verify tabs restore
 		panel.toggle_panel()
-		vim.wait(50)
 		assert.is_true(tabs.are_open())
 
 		-- Close again
@@ -215,7 +204,6 @@ describe("vscpanel panel-tabs integration", function()
 
 		-- Cycle 3: Final reopen
 		panel.toggle_panel()
-		vim.wait(50)
 		assert.is_true(tabs.are_open())
 	end)
 end)

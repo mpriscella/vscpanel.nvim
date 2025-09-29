@@ -1,12 +1,12 @@
 local M = {}
 
---- @class panel.Keybind
+--- @class vscpanel.Keybind
 --- @field modes table
 --- @field keymap string
 --- @field callback function
 --- @field description string
 
---- @type panel.Keybind[]
+--- @type vscpanel.Keybind[]
 local keybinds = {
 	{
 		modes = { "n", "t" },
@@ -20,7 +20,7 @@ local keybinds = {
 		modes = { "n", "t" },
 		keymap = "<C-N>",
 		callback = function()
-			require("vscpanel.views.terminal.shell-picker").toggle()
+			require("vscpanel.views.terminal.context_menu").toggle()
 		end,
 		description = "panel: Open Shell Picker",
 	},
@@ -61,7 +61,7 @@ function M.setup_terminal_keybinds(buf)
 end
 
 --- Returns the defined keybinds.
---- @return panel.Keybind[]
+--- @return vscpanel.Keybind[]
 function M.keybinds()
 	return keybinds
 end

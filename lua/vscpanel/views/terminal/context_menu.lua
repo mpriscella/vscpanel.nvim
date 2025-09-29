@@ -1,18 +1,18 @@
 local M = {}
 
---- @class ShellPicker
---- @field win integer|nil: Window ID (nil when not created)
---- @field buf integer|nil: Buffer ID (nil when not created)
---- @field items ShellPickerItem[]: List of valid shells.
+--- @class vscpanel.Terminal.ContextMenu
+--- @field window_id integer|nil
+--- @field buffer_id integer|nil
+--- @field items vscpanel.Terminal.ContextMenu.Item[]
 
---- @class ShellPickerItem
+--- @class vscpanel.Terminal.ContextMenu.Item
 --- @field label string
 --- @field shell string
 
---- @type ShellPicker
+--- @type vscpanel.Terminal.ContextMenu
 local menu = {
-	win = nil,
-	buf = nil,
+	window_id = nil,
+	buffer_id = nil,
 	items = {},
 }
 
@@ -47,13 +47,13 @@ end
 
 --- Closes the context menu.
 local function close_menu()
-	if menu.win and vim.api.nvim_win_is_valid(menu.win) then
-		pcall(vim.api.nvim_win_close, menu.win, true)
+	if menu.window_id and vim.api.nvim_win_is_valid(menu.window_id) then
+		pcall(vim.api.nvim_win_close, menu.window_id, true)
 	end
-	if menu.buf and vim.api.nvim_buf_is_valid(menu.buf) then
-		pcall(vim.api.nvim_buf_delete, menu.buf, { force = true })
+	if menu.buffer_id and vim.api.nvim_buf_is_valid(menu.buffer_id) then
+		pcall(vim.api.nvim_buf_delete, menu.buffer_id, { force = true })
 	end
-	menu.win, menu.buf, menu.items = nil, nil, {}
+	menu.window_id, menu.buffer_id, menu.items = nil, nil, {}
 end
 
 --- Opens the shell picker.
@@ -74,20 +74,20 @@ local function open()
 
 	menu.items = valid_shells()
 
-	menu.buf = vim.api.nvim_create_buf(false, true)
+	menu.buffer_id = vim.api.nvim_create_buf(false, true)
 
 	local lines = {}
 	for i, it in ipairs(menu.items) do
 		lines[i] = it.label
 	end
 
-	vim.api.nvim_buf_set_lines(menu.buf, 0, -1, false, lines)
+	vim.api.nvim_buf_set_lines(menu.buffer_id, 0, -1, false, lines)
 
 	-- Make it look/behave like a menu
-	vim.bo[menu.buf].modifiable = false
-	vim.bo[menu.buf].bufhidden = "wipe"
-	vim.bo[menu.buf].filetype = "PanelTermMenu"
-	vim.bo[menu.buf].buftype = "nofile"
+	vim.bo[menu.buffer_id].modifiable = false
+	vim.bo[menu.buffer_id].bufhidden = "wipe"
+	vim.bo[menu.buffer_id].filetype = "PanelTermMenu"
+	vim.bo[menu.buffer_id].buftype = "nofile"
 
 	-- Size to content
 	local width = math.max(
@@ -104,7 +104,7 @@ local function open()
 	row = math.max(1, math.min(row, maxrow - height))
 	col = math.max(1, math.min(col, maxcol - width))
 
-	menu.win = vim.api.nvim_open_win(menu.buf, true, {
+	menu.window_id = vim.api.nvim_open_win(menu.buffer_id, true, {
 		relative = "editor",
 		row = row,
 		col = col,
@@ -118,11 +118,11 @@ local function open()
 		title_pos = "center",
 	})
 
-	vim.api.nvim_set_option_value("cursorline", true, { win = menu.win })
+	vim.api.nvim_set_option_value("cursorline", true, { win = menu.window_id })
 
 	-- Auto-close when leaving/clicking elsewhere
 	vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
-		buffer = menu.buf,
+		buffer = menu.buffer_id,
 		once = true,
 		callback = close_menu,
 	})
@@ -130,7 +130,7 @@ local function open()
 	-- Helpers
 	local function item_at_mouse()
 		local mp = vim.fn.getmousepos()
-		if mp.winid ~= menu.win then
+		if mp.winid ~= menu.window_id then
 			return nil
 		end
 		return menu.items[mp.winrow - 1]
@@ -146,10 +146,10 @@ local function open()
 		local win = require("vscpanel.state").window_id()
 		require("vscpanel.views.terminal").create_terminal(win, item.shell)
 		require("vscpanel").ensure_insert()
-	end, { buffer = menu.buf, silent = true, nowait = true })
+	end, { buffer = menu.buffer_id, silent = true, nowait = true })
 
 	vim.keymap.set("n", "<CR>", function()
-		local l = vim.api.nvim_win_get_cursor(menu.win)[1]
+		local l = vim.api.nvim_win_get_cursor(menu.window_id)[1]
 		local it = menu.items[l]
 		if not it then
 			return
@@ -159,9 +159,9 @@ local function open()
 		local win = require("vscpanel.state").window_id()
 		require("vscpanel.views.terminal").create_terminal(win, it.shell)
 		require("vscpanel").ensure_insert()
-	end, { buffer = menu.buf, silent = true })
+	end, { buffer = menu.buffer_id, silent = true })
 
-	vim.keymap.set("n", "<Esc>", close_menu, { buffer = menu.buf, silent = true })
+	vim.keymap.set("n", "<Esc>", close_menu, { buffer = menu.buffer_id, silent = true })
 end
 
 --- Toggle menu.

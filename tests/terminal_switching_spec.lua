@@ -31,7 +31,6 @@ describe("vscpanel terminal switching", function()
 
 		-- Create multiple terminals
 		terminal.create_terminal(panel_win, "bash")
-		vim.wait(50)
 
 		-- Get the terminals
 		local terminals = state.terminals()
@@ -120,7 +119,6 @@ describe("vscpanel terminal switching", function()
 
 		-- Create another terminal
 		terminal.create_terminal(panel_win, "bash")
-		vim.wait(50)
 
 		local terminals = state.terminals()
 		local first_terminal = terminals[1].buffer
@@ -163,7 +161,6 @@ describe("vscpanel terminal switching", function()
 		-- Create multiple terminals
 		terminal.create_terminal(panel_win, "bash")
 		terminal.create_terminal(panel_win, "bash")
-		vim.wait(50)
 
 		local initial_terminals = state.terminals()
 		local initial_count = #initial_terminals
@@ -212,7 +209,6 @@ describe("vscpanel terminal switching", function()
 
 		-- Create multiple terminals to trigger tabs
 		terminal.create_terminal(panel_win, "bash")
-		vim.wait(50)
 
 		-- Verify tabs are open
 		assert.is_true(tabs.are_open())
@@ -232,7 +228,6 @@ describe("vscpanel terminal switching", function()
 
 		-- Create additional terminals
 		terminal.create_terminal(panel_win, "bash")
-		vim.wait(50)
 
 		local initial_terminals = state.terminals()
 		local initial_count = #initial_terminals
@@ -274,7 +269,6 @@ describe("vscpanel terminal switching", function()
 
 		-- Create additional terminal
 		terminal.create_terminal(panel_win, "bash")
-		vim.wait(50)
 
 		local terminals = state.terminals()
 		assert.are.equal(2, #terminals)
@@ -316,13 +310,11 @@ describe("vscpanel terminal switching", function()
 		local initial_terminals = state.terminals()
 		while #initial_terminals < 2 do
 			terminal.create_terminal(panel_win, "bash")
-			vim.wait(50)
 			initial_terminals = state.terminals()
 		end
 
 		-- Create one more terminal to ensure we have multiple
 		terminal.create_terminal(panel_win, "bash")
-		vim.wait(50)
 
 		local terminals = state.terminals()
 		assert.is_true(#terminals >= 2, "Should have at least 2 terminals for this test")
