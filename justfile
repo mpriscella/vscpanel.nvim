@@ -1,34 +1,36 @@
-run-tests:
-  act -W .github/workflows/test.yaml
+# Run GitHub Workflow locally.
+run-workflow:
+  @act -W .github/workflows/test.yaml
 
+# Run Unit tests.
 run-unit-tests:
-  nvim --headless -u tests/minimal_init.lua \
+  @nvim --headless -u tests/minimal_init.lua \
     -c "PlenaryBustedDirectory tests/ { minimal_init = 'tests/minimal_init.lua', output = 'nvim' }" \
     -c "qa!"
 
+# Generate documentation helptags.
 gen-docs:
-  nvim --headless -c "helptags doc/" -c "qa!"
+  @nvim --headless -c "helptags doc/" -c "qa!"
 
-check-docs:
-  @echo "Checking documentation format..."
-  @grep -q "*vscpanel.txt*" doc/vscpanel.txt && echo "✓ Help file header found" || echo "✗ Missing help file header"
-  @grep -q "==============================================================================" doc/vscpanel.txt && echo "✓ Section separators found" || echo "✗ Missing section separators"
-  @grep -q "|vscpanel-" doc/vscpanel.txt && echo "✓ Help tags found" || echo "✗ Missing help tags"
-
+# Test whether the help documentation is properly loading.
 test-docs:
-  nvim --headless -c "helptags doc/" -c "help vscpanel" -c "qa!"
+  @nvim --headless -c "helptags doc/" -c "help vscpanel" -c "qa!"
+  @echo "Documentation is good"
 
-docs: gen-docs check-docs test-docs
+# Generate and test documentation.
+docs: gen-docs test-docs
   @echo "Documentation generation complete!"
 
+# Run luacheck
 lint:
-  luacheck lua/ --globals vim
+  @luacheck lua/ --globals vim
 
+# Check plugin health.
 health:
-  nvim --headless -u tests/minimal_init.lua \
-    -c "lua require('vscpanel').setup()" \
+  @nvim --headless -u tests/minimal_init.lua \
     -c "checkhealth vscpanel" \
     -c "qa!"
 
-check: run-tests lint docs health
+# Run all checks.
+check: run-workflow lint docs health
   @echo "All checks passed!"

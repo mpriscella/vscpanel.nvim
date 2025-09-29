@@ -1,5 +1,5 @@
 --- @class vscpanel.Config
---- @field icons vscpanel.Config.Icons? Icon definitions for the plugin.
+--- @field icons vscpanel.Config.Icons?
 --- @field shell string? The path to an executable shell.
 --- @field size integer? The size of the panel when the position is "bottom" or "top".
 --- @field position string? The position of the panel. Either "bottom" (default), "top", "left", or "right".
@@ -18,26 +18,28 @@
 --- @field launch_profile string?
 --- @field new_terminal string?
 
-local M = {
-	--- @type vscpanel.Config
-	defaults = {
-		size = 18,
-		shell = vim.o.shell,
-		position = "bottom",
-		icons = {
-			panel = {
-				hide_panel = "",
-				toggle_panel_size = " ",
-			},
-			terminal = {
-				close_terminal = "",
-				-- close_terminal = "", -- INFO: Disabling close terminal icon for now.
-				help = "󰋖",
-				launch_profile = "",
-				new_terminal = "",
-			},
+--- @type vscpanel.Config
+local defaults = {
+	size = 18,
+	shell = vim.o.shell,
+	position = "bottom",
+	icons = {
+		panel = {
+			hide_panel = "",
+			toggle_panel_size = " ",
+		},
+		terminal = {
+			close_terminal = "",
+			-- close_terminal = "", -- INFO: Disabling close terminal icon for now.
+			help = "󰋖",
+			launch_profile = "",
+			new_terminal = "",
 		},
 	},
+}
+
+local M = {
+	defaults = defaults,
 }
 
 --- Normalize and validate the passed in opts.
