@@ -17,6 +17,7 @@ local commands = {
 		end,
 	},
 	{
+		--- TODO: This command should only be available if the panel is visible.
 		name = "TogglePanelSize",
 		opts = {
 			desc = "Toggle Panel Size",
