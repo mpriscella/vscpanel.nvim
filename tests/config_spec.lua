@@ -16,12 +16,10 @@ describe("vscpanel.nvim config", function()
 		local config = require("vscpanel.config")
 		local opts = config.normalize({ size = -10 })
 		assert.are.equal(opts.size, config.defaults.size)
-		assert
-			.stub(notify_stub)
-			.was_called_with(
-				"vscpanel: 'size' must be a positive number, using default: " .. config.defaults.size,
-				vim.log.levels.WARN
-			)
+		assert.stub(notify_stub).was_called_with(
+			"vscpanel.nvim: 'size' must be a positive number, using default: " .. config.defaults.size,
+			vim.log.levels.WARN
+		)
 
 		opts = config.normalize({ size = "two" })
 		assert.are.equal(opts.size, config.defaults.size)
@@ -52,6 +50,6 @@ describe("vscpanel.nvim config", function()
 		assert.are.equal(opts.position, config.defaults.position)
 		assert
 			.stub(notify_stub)
-			.was_called_with("vscpanel: 'position' must be one of: bottom, top, left, right", vim.log.levels.WARN)
+			.was_called_with("vscpanel.nvim: 'position' must be one of: bottom, top, left, right", vim.log.levels.WARN)
 	end)
 end)

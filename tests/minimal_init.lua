@@ -21,7 +21,7 @@ local function ensure_plenary()
 		end
 
 		local url = "https://github.com/nvim-lua/plenary.nvim"
-		vim.notify("Cloning plenary.nvim into " .. plenary_path, vim.log.levels.INFO)
+		vim.notify("vscpanel.nvim: Cloning plenary.nvim into " .. plenary_path, vim.log.levels.INFO)
 		vim.fn.system({ "git", "clone", "--depth=1", url, plenary_path })
 		if vim.v.shell_error ~= 0 then
 			error("Failed to clone plenary.nvim. Ensure git is installed and network is available.")
