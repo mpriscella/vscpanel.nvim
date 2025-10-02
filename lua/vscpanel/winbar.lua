@@ -232,7 +232,7 @@ function M.update()
 
 	local ok = pcall(vim.api.nvim_set_option_value, "winbar", winbar_content, { win = win })
 	if not ok then
-		vim.notify("vscpanel.nvim: Error updating winbar.", vim.log.levels.ERROR)
+		require("vscpanel.logging").error("vscpanel.nvim: Error updating winbar.")
 	end
 end
 

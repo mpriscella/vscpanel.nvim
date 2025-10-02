@@ -147,7 +147,7 @@ end
 --- @param winid? integer  -- window to toggle; defaults to state.panel_win or current
 function M.max_toggle(winid)
 	if not M.is_open() then
-		vim.notify("vscpanel.nvim: Cannot toggle panel size when panel is not open", vim.log.levels.INFO)
+		require("vscpanel.logging").info("vscpanel.nvim: Cannot toggle panel size when panel is not open")
 		return
 	end
 

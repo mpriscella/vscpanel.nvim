@@ -1,15 +1,18 @@
 local assert = require("luassert")
 local stub = require("luassert.stub")
-local notify_stub
+
+local info_stub
+local logging
 
 describe("vscpanel.nvim panels", function()
 	before_each(function()
-		require("utils").cleanup()
-		notify_stub = stub(vim, "notify")
+		logging = require("vscpanel.logging")
+		info_stub = stub(logging, "info")
 	end)
 
 	after_each(function()
-		notify_stub:revert()
+		require("utils").cleanup()
+		info_stub:revert()
 	end)
 
 	it("creates a panel window", function()
@@ -32,8 +35,6 @@ describe("vscpanel.nvim panels", function()
 		panel.toggle_panel()
 
 		panel.max_toggle()
-		assert
-			.stub(notify_stub)
-			.was_called_with("vscpanel.nvim: Cannot toggle panel size when panel is not open", vim.log.levels.INFO)
+		assert.stub(info_stub).was_called_with("vscpanel.nvim: Cannot toggle panel size when panel is not open")
 	end)
 end)
