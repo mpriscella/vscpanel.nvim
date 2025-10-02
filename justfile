@@ -8,18 +8,19 @@ run-unit-tests:
     -c "PlenaryBustedDirectory tests/ { minimal_init = 'tests/minimal_init.lua', output = 'nvim' }" \
     -c "qa!"
 
-# Generate documentation helptags.
-gen-docs:
-  @nvim --headless -c "helptags doc/" -c "qa!"
-
-# Test whether the help documentation is properly loading.
-test-docs:
-  @nvim --headless -c "helptags doc/" -c "help vscpanel" -c "qa!"
-  @echo "Documentation is good"
-
 # Generate and test documentation.
-docs: gen-docs test-docs
-  @echo "Documentation generation complete!"
+docs:
+  @echo "Generating documentation..."
+  @nvim --headless -u NONE \
+    -c "helptags doc/" \
+    -c "quit"
+
+  @echo "Testing documentation..."
+  @nvim --headless -u NONE \
+    -c "help vscpanel" \
+    -c "quit" 2>&1 | grep -q "vscpanel" || (echo "Doc test failed!" && exit 1)
+
+  @echo "Documentation OK"
 
 # Run luacheck
 lint:
