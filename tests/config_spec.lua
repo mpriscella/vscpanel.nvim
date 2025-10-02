@@ -1,25 +1,26 @@
 local assert = require("luassert")
 local stub = require("luassert.stub")
-local notify_stub
+local logging
+local warn_stub
 
 describe("vscpanel.nvim config", function()
 	before_each(function()
-		require("utils").cleanup()
-		notify_stub = stub(vim, "notify")
+		logging = require("vscpanel.logging")
+		warn_stub = stub(logging, "warn")
 	end)
 
 	after_each(function()
-		notify_stub:revert()
+		require("utils").cleanup()
+		warn_stub:revert()
 	end)
 
 	it("normalizes the size", function()
 		local config = require("vscpanel.config")
 		local opts = config.normalize({ size = -10 })
 		assert.are.equal(opts.size, config.defaults.size)
-		assert.stub(notify_stub).was_called_with(
-			"vscpanel.nvim: 'size' must be a positive number, using default: " .. config.defaults.size,
-			vim.log.levels.WARN
-		)
+		assert
+			.stub(warn_stub)
+			.was_called_with("vscpanel.nvim: 'size' must be a positive number, using default: " .. config.defaults.size)
 
 		opts = config.normalize({ size = "two" })
 		assert.are.equal(opts.size, config.defaults.size)
@@ -48,8 +49,6 @@ describe("vscpanel.nvim config", function()
 
 		opts = config.normalize({ position = "backwards" })
 		assert.are.equal(opts.position, config.defaults.position)
-		assert
-			.stub(notify_stub)
-			.was_called_with("vscpanel.nvim: 'position' must be one of: bottom, top, left, right", vim.log.levels.WARN)
+		assert.stub(warn_stub).was_called_with("vscpanel.nvim: 'position' must be one of: bottom, top, left, right")
 	end)
 end)

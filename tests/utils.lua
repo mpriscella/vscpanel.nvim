@@ -14,6 +14,7 @@ function M.cleanup()
 	package.loaded["vscpanel.health"] = nil
 	package.loaded["vscpanel.help"] = nil
 	package.loaded["vscpanel.keybinds"] = nil
+	package.loaded["vscpanel.logging"] = nil
 	package.loaded["vscpanel.panel"] = nil
 	package.loaded["vscpanel.state"] = nil
 	package.loaded["vscpanel.winbar"] = nil

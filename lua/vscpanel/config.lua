@@ -50,25 +50,23 @@ function M.normalize(opts)
 
 	-- Validate size.
 	if type(opts.size) ~= "number" or opts.size <= 0 then
-		vim.notify(
-			"vscpanel.nvim: 'size' must be a positive number, using default: " .. M.defaults.size,
-			vim.log.levels.WARN
+		require("vscpanel.logging").warn(
+			"vscpanel.nvim: 'size' must be a positive number, using default: " .. M.defaults.size
 		)
 		opts.size = M.defaults.size
 	end
 
 	-- Validate shell.
 	if type(opts.shell) ~= "string" or opts.shell == "" or not vim.fn.executable(opts.shell) then
-		vim.notify("vscpanel.nvim: 'shell' must be a non-empty string, using default", vim.log.levels.WARN)
+		require("vscpanel.logging").warn("vscpanel.nvim: 'shell' must be a non-empty string, using default")
 		opts.shell = M.defaults.shell
 	end
 
 	-- Validate position.
 	local valid_positions = { "bottom", "top", "left", "right" }
 	if not vim.tbl_contains(valid_positions, opts.position) then
-		vim.notify(
-			"vscpanel.nvim: 'position' must be one of: " .. table.concat(valid_positions, ", "),
-			vim.log.levels.WARN
+		require("vscpanel.logging").warn(
+			"vscpanel.nvim: 'position' must be one of: " .. table.concat(valid_positions, ", ")
 		)
 		opts.position = M.defaults.position
 	end

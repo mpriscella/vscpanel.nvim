@@ -71,7 +71,7 @@ function M.create_terminal(win, shell)
 			desc = "Clean up vscpanel terminal on close",
 		})
 	else
-		vim.notify("vscpanel.nvim: Failed to start " .. cmd .. " terminal", vim.log.levels.ERROR)
+		require("vscpanel.logging").error("vscpanel.nvim: Failed to start " .. cmd .. " terminal")
 	end
 
 	return buf
@@ -151,13 +151,13 @@ function M.rename_terminal(line_number)
 	local tabs = require("vscpanel.views.terminal.tabs")
 
 	if line_number < 1 or line_number > #terminals then
-		vim.notify("vscpanel.nvim: Invalid terminal selection", vim.log.levels.WARN)
+		require("vscpanel.logging").warn("vscpanel.nvim: Invalid terminal selection")
 		return
 	end
 
 	local terminal = terminals[line_number]
 	if not terminal or not terminal.buffer or not vim.api.nvim_buf_is_valid(terminal.buffer) then
-		vim.notify("vscpanel.nvim: Invalid terminal", vim.log.levels.WARN)
+		require("vscpanel.logging").warn("vscpanel.nvim: Invalid terminal")
 		return
 	end
 
@@ -175,7 +175,7 @@ function M.rename_terminal(line_number)
 			-- state.set_terminal_label(terminal.buffer, new_label)
 			-- Refresh the terminal list display
 			tabs.refresh_tabs()
-			vim.notify("vscpanel.nvim: Terminal renamed to: " .. new_label, vim.log.levels.INFO)
+			require("vscpanel.logging").info("vscpanel.nvim: Terminal renamed to: " .. new_label)
 		end
 	end)
 end
