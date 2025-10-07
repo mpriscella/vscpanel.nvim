@@ -10,6 +10,8 @@ A VSCode-style panel for Neovim with advanced multi-terminal management.
 - Multiple terminal support with tab-based switching
 - Smart auto-insert mode for seamless terminal interaction
 
+![Demo](https://github.com/user-attachments/assets/6f7977ac-414b-420b-883d-f06fe9f07879)
+
 ## Features
 
 ### Core Panel Management
